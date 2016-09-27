@@ -34,8 +34,8 @@ class TaskDetailActivity : AppCompatActivity() {
         setContentView(R.layout.taskdetail_act)
 
         // Set up the toolbar.
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
+        //val toolbar = findViewById(R.id.toolbar) as Toolbar
+        //setSupportActionBar(toolbar)
         val ab = supportActionBar
         ab!!.setDisplayHomeAsUpEnabled(true)
         ab.setDisplayShowHomeEnabled(true)

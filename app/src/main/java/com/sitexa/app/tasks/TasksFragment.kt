@@ -26,7 +26,6 @@ import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.PopupMenu
 import android.view.*
 import android.widget.*
-import com.google.common.base.Preconditions.checkNotNull
 import com.sitexa.app.R
 import com.sitexa.app.addedittask.AddEditTaskActivity
 import com.sitexa.app.data.Task
@@ -39,19 +38,12 @@ import java.util.*
 class TasksFragment : Fragment(), TasksContract.View {
 
     private var mPresenter: TasksContract.Presenter? = null
-
     private var mListAdapter: TasksAdapter? = null
-
     private var mNoTasksView: View? = null
-
     private var mNoTaskIcon: ImageView? = null
-
     private var mNoTaskMainView: TextView? = null
-
     private var mNoTaskAddView: TextView? = null
-
     private var mTasksView: LinearLayout? = null
-
     private var mFilteringLabelView: TextView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +57,7 @@ class TasksFragment : Fragment(), TasksContract.View {
     }
 
     override fun setPresenter(presenter: TasksContract.Presenter) {
-        mPresenter = checkNotNull(presenter)
+        mPresenter = presenter
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -101,9 +93,9 @@ class TasksFragment : Fragment(), TasksContract.View {
                 ContextCompat.getColor(activity, R.color.colorPrimaryDark))
         // Set the scrolling view in the custom SwipeRefreshLayout.
         (root.findViewById(R.id.refresh_layout) as ScrollChildSwipeRefreshLayout).setScrollUpChild(root.findViewById(R.id.tasks_list))
+        (root.findViewById(R.id.refresh_layout) as ScrollChildSwipeRefreshLayout).setOnRefreshListener({ mPresenter!!.loadTasks(false) })
 
-        (root.findViewById(R.id.refresh_layout) as ScrollChildSwipeRefreshLayout).setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener { mPresenter!!.loadTasks(false) })
-
+        //开启OptionsMenu
         setHasOptionsMenu(true)
 
         return root
@@ -204,7 +196,7 @@ class TasksFragment : Fragment(), TasksContract.View {
         mNoTasksView!!.visibility = View.VISIBLE
 
         mNoTaskMainView!!.text = mainText
-        mNoTaskIcon!!.setImageDrawable(resources.getDrawable(iconRes,null))
+        mNoTaskIcon!!.setImageDrawable(resources.getDrawable(iconRes, null))
         mNoTaskAddView!!.visibility = if (showAddView) View.VISIBLE else View.GONE
     }
 
@@ -257,85 +249,78 @@ class TasksFragment : Fragment(), TasksContract.View {
         return isAdded
     }
 
-    private class TasksAdapter(tasks: List<Task>, private val mItemListener: TaskItemListener) : BaseAdapter() {
-
-        private var mTasks: List<Task>? = null
-
-        init {
-            setList(tasks)
-        }
-
-        fun replaceData(tasks: List<Task>) {
-            setList(tasks)
-            notifyDataSetChanged()
-        }
-
-        private fun setList(tasks: List<Task>) {
-            mTasks = checkNotNull(tasks)
-        }
-
-        override fun getCount(): Int {
-            return mTasks!!.size
-        }
-
-        override fun getItem(i: Int): Task {
-            return mTasks!![i]
-        }
-
-        override fun getItemId(i: Int): Long {
-            return i.toLong()
-        }
-
-        override fun getView(i: Int, view: View, viewGroup: ViewGroup): View {
-            var rowView: View? = view
-            if (rowView == null) {
-                val inflater = LayoutInflater.from(viewGroup.context)
-                rowView = inflater.inflate(R.layout.task_item, viewGroup, false)
-            }
-
-            val task = getItem(i)
-
-            val titleTV = rowView!!.findViewById(R.id.title) as TextView
-            titleTV.setText(task.getTitleForList())
-
-            val completeCB = rowView.findViewById(R.id.complete) as CheckBox
-
-            // Active/completed task UI
-            completeCB.isChecked = task.completed
-            if (task.completed) {
-                rowView.setBackgroundDrawable(viewGroup.context.resources.getDrawable(R.drawable.list_completed_touch_feedback,null))
-            } else {
-                rowView.setBackgroundDrawable(viewGroup.context.resources.getDrawable(R.drawable.touch_feedback,null))
-            }
-
-            completeCB.setOnClickListener {
-                if (!task.completed) {
-                    mItemListener.onCompleteTaskClick(task)
-                } else {
-                    mItemListener.onActivateTaskClick(task)
-                }
-            }
-
-            rowView.setOnClickListener(View.OnClickListener { mItemListener.onTaskClick(task) })
-
-            return rowView
-        }
-    }
-
-    interface TaskItemListener {
-
-        fun onTaskClick(clickedTask: Task)
-
-        fun onCompleteTaskClick(completedTask: Task)
-
-        fun onActivateTaskClick(activatedTask: Task)
-    }
 
     companion object {
-
         fun newInstance(): TasksFragment {
             return TasksFragment()
         }
     }
 
-}// Requires empty public constructor
+}
+
+private class TasksAdapter(tasks: List<Task>, private val mItemListener: TaskItemListener) : BaseAdapter() {
+
+    private var mTasks: List<Task>? = null
+
+    init {
+        mTasks = tasks
+    }
+
+    fun replaceData(tasks: List<Task>) {
+        mTasks = tasks
+        notifyDataSetChanged()
+    }
+
+    override fun getCount(): Int {
+        return mTasks!!.size
+    }
+
+    override fun getItem(i: Int): Task {
+        return mTasks!![i]
+    }
+
+    override fun getItemId(i: Int): Long {
+        return i.toLong()
+    }
+
+    override fun getView(i: Int, view: View, viewGroup: ViewGroup): View {
+        var rowView: View? = view
+        if (rowView == null) {
+            val inflater = LayoutInflater.from(viewGroup.context)
+            rowView = inflater.inflate(R.layout.task_item, viewGroup, false)
+        }
+
+        val task = getItem(i)
+
+        val titleTV = rowView!!.findViewById(R.id.title) as TextView
+        titleTV.setText(task.getTitleForList())
+
+        val completeCB = rowView.findViewById(R.id.complete) as CheckBox
+
+        // Active/completed task UI
+        completeCB.isChecked = task.completed
+        if (task.completed) {
+            rowView.setBackground(viewGroup.context.resources.getDrawable(R.drawable.list_completed_touch_feedback, null))
+        } else {
+            rowView.setBackground(viewGroup.context.resources.getDrawable(R.drawable.touch_feedback, null))
+        }
+
+        completeCB.setOnClickListener {
+            if (!task.completed) {
+                mItemListener.onCompleteTaskClick(task)
+            } else {
+                mItemListener.onActivateTaskClick(task)
+            }
+        }
+
+        rowView.setOnClickListener(View.OnClickListener { mItemListener.onTaskClick(task) })
+
+        return rowView
+    }
+}
+
+interface TaskItemListener {
+    fun onTaskClick(clickedTask: Task)
+    fun onCompleteTaskClick(completedTask: Task)
+    fun onActivateTaskClick(activatedTask: Task)
+}

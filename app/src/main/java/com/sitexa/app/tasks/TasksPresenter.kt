@@ -17,7 +17,6 @@
 package com.sitexa.app.tasks
 
 import android.app.Activity
-import com.google.common.base.Preconditions.checkNotNull
 import com.sitexa.app.addedittask.AddEditTaskActivity
 import com.sitexa.app.data.Task
 import com.sitexa.app.data.source.TasksDataSource
@@ -32,17 +31,13 @@ import java.util.*
 class TasksPresenter(tasksRepository: TasksRepository, tasksView: TasksContract.View) : TasksContract.Presenter {
 
     private val mTasksRepository: TasksRepository
-
     private val mTasksView: TasksContract.View
-
     private var mCurrentFiltering = TasksFilterType.ALL_TASKS
-
     private var mFirstLoad = true
 
     init {
-        mTasksRepository = checkNotNull<TasksRepository>(tasksRepository, "tasksRepository cannot be null")
-        mTasksView = checkNotNull(tasksView, "tasksView cannot be null!")
-
+        mTasksRepository = tasksRepository
+        mTasksView = tasksView
         mTasksView.setPresenter(this)
     }
 
@@ -158,19 +153,16 @@ class TasksPresenter(tasksRepository: TasksRepository, tasksView: TasksContract.
     }
 
     override fun openTaskDetails(requestedTask: Task) {
-        checkNotNull<Task>(requestedTask, "requestedTask cannot be null!")
         mTasksView.showTaskDetailsUi(requestedTask.id)
     }
 
     override fun completeTask(completedTask: Task) {
-        checkNotNull<Task>(completedTask, "completedTask cannot be null!")
         mTasksRepository.completeTask(completedTask)
         mTasksView.showTaskMarkedComplete()
         loadTasks(false, false)
     }
 
     override fun activateTask(activeTask: Task) {
-        checkNotNull<Task>(activeTask, "activeTask cannot be null!")
         mTasksRepository.activateTask(activeTask)
         mTasksView.showTaskMarkedActive()
         loadTasks(false, false)

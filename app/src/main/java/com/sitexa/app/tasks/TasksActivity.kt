@@ -24,7 +24,6 @@ import android.support.test.espresso.IdlingResource
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.sitexa.app.Injection
 import com.sitexa.app.R
@@ -42,7 +41,7 @@ class TasksActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tasks_act)
 
-        // Set up the toolbar.
+        // Set up the toolbar....系统AppBarLayout自带toolbar
         //val toolbar = findViewById(R.id.toolbar) as Toolbar
         //setSupportActionBar(toolbar)
         val ab = supportActionBar
@@ -53,19 +52,17 @@ class TasksActivity : AppCompatActivity() {
         mDrawerLayout = findViewById(R.id.drawer_layout) as DrawerLayout
         mDrawerLayout!!.setStatusBarBackground(R.color.colorPrimaryDark)
         val navigationView = findViewById(R.id.nav_view) as NavigationView
-            setupDrawerContent(navigationView)
+        setupDrawerContent(navigationView)
 
         var tasksFragment: TasksFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as TasksFragment?
         if (tasksFragment == null) {
             // Create the fragment
             tasksFragment = TasksFragment.newInstance()
-            ActivityUtils.addFragmentToActivity(
-                    supportFragmentManager, tasksFragment, R.id.contentFrame)
+            ActivityUtils.addFragmentToActivity(supportFragmentManager, tasksFragment, R.id.contentFrame)
         }
 
         // Create the presenter
-        mTasksPresenter = TasksPresenter(
-                Injection.provideTasksRepository(applicationContext), tasksFragment)
+        mTasksPresenter = TasksPresenter(Injection.provideTasksRepository(applicationContext), tasksFragment)
 
         // Load previously saved state, if available.
         if (savedInstanceState != null) {
@@ -76,7 +73,6 @@ class TasksActivity : AppCompatActivity() {
 
     public override fun onSaveInstanceState(outState: Bundle) {
         outState.putSerializable(CURRENT_FILTERING_KEY, mTasksPresenter!!.getFiltering())
-
         super.onSaveInstanceState(outState)
     }
 
@@ -95,6 +91,7 @@ class TasksActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.list_navigation_menu_item -> {
+                    //自身，不用做动作
                 }
                 R.id.statistics_navigation_menu_item -> {
                     val intent = Intent(this, StatisticsActivity::class.java)
@@ -102,10 +99,11 @@ class TasksActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
                 else -> {
+                    // Do nothing, we're already on that screen
                 }
-            }// Do nothing, we're already on that screen
-            // Close the navigation drawer when an item is selected.
+            }
             menuItem.isChecked = true
+            // Close the navigation drawer when an item is selected.
             mDrawerLayout!!.closeDrawers()
             true
         }
@@ -116,7 +114,6 @@ class TasksActivity : AppCompatActivity() {
         get() = EspressoIdlingResource.idlingResource
 
     companion object {
-
         private val CURRENT_FILTERING_KEY = "CURRENT_FILTERING_KEY"
     }
 }
