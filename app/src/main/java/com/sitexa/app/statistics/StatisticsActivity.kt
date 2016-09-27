@@ -42,8 +42,8 @@ class StatisticsActivity : AppCompatActivity() {
         setContentView(R.layout.statistics_act)
 
         // Set up the toolbar.
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
+        //val toolbar = findViewById(R.id.toolbar) as Toolbar
+        //setSupportActionBar(toolbar)
         val ab = supportActionBar
         ab!!.setTitle(R.string.statistics_title)
         ab.setHomeAsUpIndicator(R.drawable.ic_menu)
@@ -55,7 +55,7 @@ class StatisticsActivity : AppCompatActivity() {
         val navigationView = findViewById(R.id.nav_view) as NavigationView
         setupDrawerContent(navigationView)
 
-        var statisticsFragment: StatisticsFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as StatisticsFragment
+        var statisticsFragment: StatisticsFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as StatisticsFragment?
         if (statisticsFragment == null) {
             statisticsFragment = StatisticsFragment.newInstance()
             ActivityUtils.addFragmentToActivity(supportFragmentManager,

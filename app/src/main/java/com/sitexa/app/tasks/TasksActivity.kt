@@ -43,8 +43,8 @@ class TasksActivity : AppCompatActivity() {
         setContentView(R.layout.tasks_act)
 
         // Set up the toolbar.
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
-        setSupportActionBar(toolbar)
+        //val toolbar = findViewById(R.id.toolbar) as Toolbar
+        //setSupportActionBar(toolbar)
         val ab = supportActionBar
         ab!!.setHomeAsUpIndicator(R.drawable.ic_menu)
         ab.setDisplayHomeAsUpEnabled(true)
@@ -55,7 +55,7 @@ class TasksActivity : AppCompatActivity() {
         val navigationView = findViewById(R.id.nav_view) as NavigationView
             setupDrawerContent(navigationView)
 
-        var tasksFragment: TasksFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as TasksFragment
+        var tasksFragment: TasksFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as TasksFragment?
         if (tasksFragment == null) {
             // Create the fragment
             tasksFragment = TasksFragment.newInstance()
