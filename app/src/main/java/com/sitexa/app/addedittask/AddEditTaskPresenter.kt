@@ -39,7 +39,7 @@ class AddEditTaskPresenter
         mAddTaskView.setPresenter(this)
     }
 
-    fun start() {
+    override fun start() {
         if (!isNewTask) {
             populateTask()
         }
@@ -57,18 +57,18 @@ class AddEditTaskPresenter
         if (isNewTask) {
             throw RuntimeException("populateTask() was called but task is new.")
         }
-        mTasksRepository.getTask(mTaskId, this)
+        mTasksRepository.getTask(mTaskId!!, this)
     }
 
-    fun onTaskLoaded(task: Task) {
+    override fun onTaskLoaded(task: Task) {
         // The view may not be able to handle UI updates anymore
         if (mAddTaskView.isActive) {
-            mAddTaskView.setTitle(task.getTitle())
-            mAddTaskView.setDescription(task.getDescription())
+            mAddTaskView.setTitle(task.title!!)
+            mAddTaskView.setDescription(task.description!!)
         }
     }
 
-    fun onDataNotAvailable() {
+    override fun onDataNotAvailable() {
         // The view may not be able to handle UI updates anymore
         if (mAddTaskView.isActive) {
             mAddTaskView.showEmptyTaskError()

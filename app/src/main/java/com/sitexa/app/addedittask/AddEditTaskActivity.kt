@@ -53,7 +53,7 @@ class AddEditTaskActivity : AppCompatActivity() {
                 actionBar.setTitle(R.string.edit_task)
                 val bundle = Bundle()
                 bundle.putString(AddEditTaskFragment.ARGUMENT_EDIT_TASK_ID, taskId)
-                addEditTaskFragment!!.arguments = bundle
+                addEditTaskFragment.arguments = bundle
             } else {
                 actionBar.setTitle(R.string.add_task)
             }

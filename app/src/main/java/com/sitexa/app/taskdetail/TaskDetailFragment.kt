@@ -16,29 +16,20 @@
 
 package com.sitexa.app.taskdetail
 
-import android.R
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.CheckBox
-import android.widget.CompoundButton
 import android.widget.TextView
-
-import com.example.android.architecture.blueprints.todoapp.R
-import com.example.android.architecture.blueprints.todoapp.addedittask.AddEditTaskActivity
-import com.example.android.architecture.blueprints.todoapp.addedittask.AddEditTaskFragment
 import com.google.common.base.Preconditions
-
 import com.google.common.base.Preconditions.checkNotNull
+import com.sitexa.app.R
+import com.sitexa.app.addedittask.AddEditTaskActivity
+import com.sitexa.app.addedittask.AddEditTaskFragment
 
 /**
  * Main UI for the task detail screen.

@@ -117,7 +117,7 @@ class TasksLocalDataSource private constructor(context: Context) : TasksDataSour
         values.put(TaskEntry.COLUMN_NAME_ENTRY_ID, task.id)
         values.put(TaskEntry.COLUMN_NAME_TITLE, task.title)
         values.put(TaskEntry.COLUMN_NAME_DESCRIPTION, task.description)
-        values.put(TaskEntry.COLUMN_NAME_COMPLETED, task.isCompleted)
+        values.put(TaskEntry.COLUMN_NAME_COMPLETED, task.completed)
 
         db.insert(TaskEntry.TABLE_NAME, null, values)
 

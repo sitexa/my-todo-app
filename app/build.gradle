@@ -102,8 +102,8 @@ dependencies {
     androidTestCompile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     androidTestCompile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
 }
+
 repositories {
     mavenCentral()
 }

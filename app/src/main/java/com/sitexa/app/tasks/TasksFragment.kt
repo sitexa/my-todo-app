@@ -204,7 +204,7 @@ class TasksFragment : Fragment(), TasksContract.View {
         mNoTasksView!!.visibility = View.VISIBLE
 
         mNoTaskMainView!!.text = mainText
-        mNoTaskIcon!!.setImageDrawable(resources.getDrawable(iconRes))
+        mNoTaskIcon!!.setImageDrawable(resources.getDrawable(iconRes,null))
         mNoTaskAddView!!.visibility = if (showAddView) View.VISIBLE else View.GONE
     }
 
@@ -303,9 +303,9 @@ class TasksFragment : Fragment(), TasksContract.View {
             // Active/completed task UI
             completeCB.isChecked = task.completed
             if (task.completed) {
-                rowView.setBackgroundDrawable(viewGroup.context.resources.getDrawable(R.drawable.list_completed_touch_feedback))
+                rowView.setBackgroundDrawable(viewGroup.context.resources.getDrawable(R.drawable.list_completed_touch_feedback,null))
             } else {
-                rowView.setBackgroundDrawable(viewGroup.context.resources.getDrawable(R.drawable.touch_feedback))
+                rowView.setBackgroundDrawable(viewGroup.context.resources.getDrawable(R.drawable.touch_feedback,null))
             }
 
             completeCB.setOnClickListener {

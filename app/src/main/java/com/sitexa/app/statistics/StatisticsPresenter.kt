@@ -17,6 +17,8 @@
 package com.sitexa.app.statistics
 
 import com.google.common.base.Preconditions.checkNotNull
+import com.sitexa.app.data.Task
+import com.sitexa.app.data.source.TasksDataSource
 import com.sitexa.app.data.source.TasksRepository
 import com.sitexa.app.util.EspressoIdlingResource
 
@@ -49,21 +51,21 @@ class StatisticsPresenter(tasksRepository: TasksRepository,
         // that the app is busy until the response is handled.
         EspressoIdlingResource.increment() // App is busy until further notice
 
-        mTasksRepository.getTasks(object : TasksDataSource.LoadTasksCallback() {
-            fun onTasksLoaded(tasks: List<Task>) {
+        mTasksRepository.getTasks(object : TasksDataSource.LoadTasksCallback {
+            override fun onTasksLoaded(tasks: List<Task>) {
                 var activeTasks = 0
                 var completedTasks = 0
 
                 // This callback may be called twice, once for the cache and once for loading
                 // the data from the server API, so we check before decrementing, otherwise
                 // it throws "Counter has been corrupted!" exception.
-                if (!EspressoIdlingResource.getIdlingResource().isIdleNow()) {
+                if (!EspressoIdlingResource.idlingResource.isIdleNow()) {
                     EspressoIdlingResource.decrement() // Set app as idle.
                 }
 
                 // We calculate number of active and completed tasks
                 for (task in tasks) {
-                    if (task.isCompleted()) {
+                    if (task.completed) {
                         completedTasks += 1
                     } else {
                         activeTasks += 1
@@ -78,7 +80,7 @@ class StatisticsPresenter(tasksRepository: TasksRepository,
                 mStatisticsView.showStatistics(activeTasks, completedTasks)
             }
 
-            fun onDataNotAvailable() {
+            override fun onDataNotAvailable() {
                 // The view may not be able to handle UI updates anymore
                 if (!mStatisticsView.isActive) {
                     return

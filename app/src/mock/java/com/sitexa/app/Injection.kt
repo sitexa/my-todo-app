@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package com.sitexa.app;
+package com.sitexa.app
 
-import android.content.Context;
-import android.support.annotation.NonNull;
+import android.content.Context
 
-import com.sitexa.app.data.FakeTasksRemoteDataSource;
-import com.sitexa.app.data.source.TasksRepository;
-import com.sitexa.app.data.source.local.TasksLocalDataSource;
+import com.sitexa.app.data.FakeTasksRemoteDataSource
+import com.sitexa.app.data.source.TasksRepository
+import com.sitexa.app.data.source.local.TasksLocalDataSource
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.base.Preconditions.checkNotNull
 
 /**
  * Enables injection of mock implementations for
- * {@link TasksDataSource} at compile time. This is useful for testing, since it allows us to use
+ * [TasksDataSource] at compile time. This is useful for testing, since it allows us to use
  * a fake instance of the class to isolate the dependencies and run a test hermetically.
  */
-public class Injection {
+object Injection {
 
-    public static TasksRepository provideTasksRepository(@NonNull Context context) {
-        checkNotNull(context);
+    fun provideTasksRepository(context: Context): TasksRepository {
+        checkNotNull(context)
         return TasksRepository.getInstance(FakeTasksRemoteDataSource.getInstance(),
-                TasksLocalDataSource.getInstance(context));
+                TasksLocalDataSource.getInstance(context))
     }
 }

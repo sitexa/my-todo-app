@@ -16,12 +16,8 @@
 
 package com.sitexa.app.taskdetail
 
-import com.example.android.architecture.blueprints.todoapp.data.Task
-import com.example.android.architecture.blueprints.todoapp.data.source.TasksDataSource
-import com.example.android.architecture.blueprints.todoapp.data.source.TasksRepository
-import com.google.common.base.Strings
-
 import com.google.common.base.Preconditions.checkNotNull
+import com.google.common.base.Strings
 import com.sitexa.app.data.Task
 import com.sitexa.app.data.source.TasksDataSource
 import com.sitexa.app.data.source.TasksRepository
@@ -56,21 +52,17 @@ class TaskDetailPresenter(private val mTaskId: String?,
         }
 
         mTaskDetailView.setLoadingIndicator(true)
-        mTasksRepository.getTask(mTaskId, object : TasksDataSource.GetTaskCallback() {
-            fun onTaskLoaded(task: Task?) {
+        mTasksRepository.getTask(mTaskId!!, object : TasksDataSource.GetTaskCallback {
+            override fun onTaskLoaded(task: Task) {
                 // The view may not be able to handle UI updates anymore
                 if (!mTaskDetailView.isActive) {
                     return
                 }
                 mTaskDetailView.setLoadingIndicator(false)
-                if (null == task) {
-                    mTaskDetailView.showMissingTask()
-                } else {
-                    showTask(task!!)
-                }
+                showTask(task)
             }
 
-            fun onDataNotAvailable() {
+            override fun onDataNotAvailable() {
                 // The view may not be able to handle UI updates anymore
                 if (!mTaskDetailView.isActive) {
                     return
@@ -93,7 +85,7 @@ class TaskDetailPresenter(private val mTaskId: String?,
             mTaskDetailView.showMissingTask()
             return
         }
-        mTasksRepository.deleteTask(mTaskId)
+        mTasksRepository.deleteTask(mTaskId!!)
         mTaskDetailView.showTaskDeleted()
     }
 
@@ -102,7 +94,7 @@ class TaskDetailPresenter(private val mTaskId: String?,
             mTaskDetailView.showMissingTask()
             return
         }
-        mTasksRepository.completeTask(mTaskId)
+        mTasksRepository.completeTask(mTaskId!!)
         mTaskDetailView.showTaskMarkedComplete()
     }
 
@@ -111,25 +103,25 @@ class TaskDetailPresenter(private val mTaskId: String?,
             mTaskDetailView.showMissingTask()
             return
         }
-        mTasksRepository.activateTask(mTaskId)
+        mTasksRepository.activateTask(mTaskId!!)
         mTaskDetailView.showTaskMarkedActive()
     }
 
     private fun showTask(task: Task) {
-        val title = task.getTitle()
-        val description = task.getDescription()
+        val title = task.title
+        val description = task.description
 
         if (Strings.isNullOrEmpty(title)) {
             mTaskDetailView.hideTitle()
         } else {
-            mTaskDetailView.showTitle(title)
+            mTaskDetailView.showTitle(title!!)
         }
 
         if (Strings.isNullOrEmpty(description)) {
             mTaskDetailView.hideDescription()
         } else {
-            mTaskDetailView.showDescription(description)
+            mTaskDetailView.showDescription(description!!)
         }
-        mTaskDetailView.showCompletionStatus(task.isCompleted())
+        mTaskDetailView.showCompletionStatus(task.completed)
     }
 }

@@ -170,7 +170,7 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
 
         // Respond immediately with cache if available
         if (cachedTask != null) {
-            callback.onTaskLoaded(cachedTask!!)
+            callback.onTaskLoaded(cachedTask)
             return
         }
 

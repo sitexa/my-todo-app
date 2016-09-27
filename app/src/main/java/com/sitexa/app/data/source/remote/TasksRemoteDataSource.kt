@@ -17,11 +17,10 @@
 package com.sitexa.app.data.source.remote
 
 import android.os.Handler
-
 import com.google.common.collect.Lists
 import com.sitexa.app.data.Task
 import com.sitexa.app.data.source.TasksDataSource
-import java.util.LinkedHashMap
+import java.util.*
 
 /**
  * Implementation of the data source that adds a latency simulating network.
@@ -49,7 +48,7 @@ class TasksRemoteDataSource private constructor() : TasksDataSource {
 
         // Simulate network by delaying the execution.
         val handler = Handler()
-        handler.postDelayed({ callback.onTaskLoaded(task) }, SERVICE_LATENCY_IN_MILLIS.toLong())
+        handler.postDelayed({ callback.onTaskLoaded(task!!) }, SERVICE_LATENCY_IN_MILLIS.toLong())
     }
 
     override fun saveTask(task: Task) {
@@ -67,7 +66,7 @@ class TasksRemoteDataSource private constructor() : TasksDataSource {
     }
 
     override fun activateTask(task: Task) {
-        val activeTask = Task(task.title, task.description, task.id)
+        val activeTask = Task(task.title!!, task.description, task.id)
         TASKS_SERVICE_DATA.put(task.id, activeTask)
     }
 
@@ -80,7 +79,7 @@ class TasksRemoteDataSource private constructor() : TasksDataSource {
         val it = TASKS_SERVICE_DATA.entries.iterator()
         while (it.hasNext()) {
             val entry = it.next()
-            if (entry.value.isCompleted()) {
+            if (entry.value.completed) {
                 it.remove()
             }
         }
@@ -99,9 +98,7 @@ class TasksRemoteDataSource private constructor() : TasksDataSource {
         TASKS_SERVICE_DATA.remove(taskId)
     }
 
-    companion object {
-
-        private var INSTANCE: TasksRemoteDataSource? = null
+    companion object factory {
 
         private val SERVICE_LATENCY_IN_MILLIS = 5000
 
@@ -113,13 +110,9 @@ class TasksRemoteDataSource private constructor() : TasksDataSource {
             addTask("Finish bridge in Tacoma", "Found awesome girders at half the cost!")
         }
 
-        val instance: TasksRemoteDataSource
-            get() {
-                if (INSTANCE == null) {
-                    INSTANCE = TasksRemoteDataSource()
-                }
-                return INSTANCE
-            }
+        fun getInstance(): TasksDataSource {
+            return TasksRemoteDataSource()
+        }
 
         private fun addTask(title: String, description: String) {
             val newTask = Task(title, description)

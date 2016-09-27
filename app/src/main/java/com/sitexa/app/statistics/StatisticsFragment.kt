@@ -16,7 +16,6 @@
 
 package com.sitexa.app.statistics
 
-import android.R
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -24,9 +23,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import com.example.android.architecture.blueprints.todoapp.R
 
 import com.google.common.base.Preconditions.checkNotNull
+import com.sitexa.app.R
 
 /**
  * Main UI for the statistics screen.
@@ -65,9 +64,9 @@ class StatisticsFragment : Fragment(), StatisticsContract.View {
         if (numberOfCompletedTasks == 0 && numberOfIncompleteTasks == 0) {
             mStatisticsTV!!.text = resources.getString(R.string.statistics_no_tasks)
         } else {
-            val displayString = resources.getString(R.string.statistics_active_tasks) + " "
-            +numberOfIncompleteTasks + "\n" + resources.getString(
-                    R.string.statistics_completed_tasks) + " " + numberOfCompletedTasks
+            val displayString: String = resources.getString(R.string.statistics_active_tasks) + " " +
+                    numberOfIncompleteTasks + "\n" + resources.getString(R.string.statistics_completed_tasks) + " " +
+                    numberOfCompletedTasks
             mStatisticsTV!!.text = displayString
         }
     }

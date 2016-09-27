@@ -21,11 +21,11 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-
+import com.sitexa.app.Injection
+import com.sitexa.app.R
 import com.sitexa.app.tasks.TasksActivity
 import com.sitexa.app.util.ActivityUtils
 
@@ -53,15 +53,13 @@ class StatisticsActivity : AppCompatActivity() {
         mDrawerLayout = findViewById(R.id.drawer_layout) as DrawerLayout
         mDrawerLayout!!.setStatusBarBackground(R.color.colorPrimaryDark)
         val navigationView = findViewById(R.id.nav_view) as NavigationView
-        if (navigationView != null) {
-            setupDrawerContent(navigationView)
-        }
+        setupDrawerContent(navigationView)
 
         var statisticsFragment: StatisticsFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as StatisticsFragment
         if (statisticsFragment == null) {
             statisticsFragment = StatisticsFragment.newInstance()
             ActivityUtils.addFragmentToActivity(supportFragmentManager,
-                    statisticsFragment!!, R.id.contentFrame)
+                    statisticsFragment, R.id.contentFrame)
         }
 
         StatisticsPresenter(
@@ -83,7 +81,7 @@ class StatisticsActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.list_navigation_menu_item -> {
-                    val intent = Intent(this@StatisticsActivity, TasksActivity::class.java)
+                    val intent = Intent(this, TasksActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
                     startActivity(intent)
                 }

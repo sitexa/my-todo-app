@@ -16,8 +16,6 @@
 
 package com.sitexa.app.addedittask
 
-import com.example.android.architecture.blueprints.todoapp.BasePresenter
-import com.example.android.architecture.blueprints.todoapp.BaseView
 import com.sitexa.app.BasePresenter
 import com.sitexa.app.BaseView
 

@@ -26,9 +26,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import com.example.android.architecture.blueprints.todoapp.R
-
 import com.google.common.base.Preconditions.checkNotNull
+import com.sitexa.app.R
 
 /**
  * Main UI for the add task screen. Users can enter a task title and description.
@@ -46,7 +45,7 @@ class AddEditTaskFragment : Fragment(), AddEditTaskContract.View {
         mPresenter!!.start()
     }
 
-    fun setPresenter(presenter: AddEditTaskContract.Presenter) {
+    override fun setPresenter(presenter: AddEditTaskContract.Presenter) {
         mPresenter = checkNotNull(presenter)
     }
 

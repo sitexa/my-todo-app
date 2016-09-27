@@ -16,15 +16,11 @@
 
 package com.sitexa.app.taskdetail
 
-import android.R
 import android.os.Bundle
-import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-
-import com.example.android.architecture.blueprints.todoapp.Injection
-import com.example.android.architecture.blueprints.todoapp.R
-import com.example.android.architecture.blueprints.todoapp.util.ActivityUtils
+import com.sitexa.app.Injection
+import com.sitexa.app.R
 import com.sitexa.app.util.ActivityUtils
 
 /**
@@ -60,7 +56,7 @@ class TaskDetailActivity : AppCompatActivity() {
         TaskDetailPresenter(
                 taskId,
                 Injection.provideTasksRepository(applicationContext),
-                taskDetailFragment!!)
+                taskDetailFragment)
     }
 
     override fun onSupportNavigateUp(): Boolean {
