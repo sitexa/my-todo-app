@@ -43,7 +43,6 @@ class AddEditTaskActivity : AppCompatActivity() {
         actionBar.setDisplayShowHomeEnabled(true)
 
         var addEditTaskFragment: AddEditTaskFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as AddEditTaskFragment?
-
         val taskId = intent.getStringExtra(AddEditTaskFragment.ARGUMENT_EDIT_TASK_ID)
 
         if (addEditTaskFragment == null) {
@@ -58,15 +57,11 @@ class AddEditTaskActivity : AppCompatActivity() {
                 actionBar.setTitle(R.string.add_task)
             }
 
-            ActivityUtils.addFragmentToActivity(supportFragmentManager,
-                    addEditTaskFragment, R.id.contentFrame)
+            ActivityUtils.addFragmentToActivity(supportFragmentManager, addEditTaskFragment, R.id.contentFrame)
         }
 
         // Create the presenter
-        AddEditTaskPresenter(
-                taskId,
-                Injection.provideTasksRepository(applicationContext),
-                addEditTaskFragment)
+        AddEditTaskPresenter(taskId, Injection.provideTasksRepository(applicationContext), addEditTaskFragment)
     }
 
     override fun onSupportNavigateUp(): Boolean {

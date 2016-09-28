@@ -249,7 +249,6 @@ class TasksFragment : Fragment(), TasksContract.View {
         return isAdded
     }
 
-
     companion object {
         fun newInstance(): TasksFragment {
             return TasksFragment()
