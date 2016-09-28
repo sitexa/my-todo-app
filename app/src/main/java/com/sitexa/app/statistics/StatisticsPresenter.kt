@@ -16,7 +16,6 @@
 
 package com.sitexa.app.statistics
 
-import com.google.common.base.Preconditions.checkNotNull
 import com.sitexa.app.data.Task
 import com.sitexa.app.data.source.TasksDataSource
 import com.sitexa.app.data.source.TasksRepository
@@ -26,17 +25,14 @@ import com.sitexa.app.util.EspressoIdlingResource
  * Listens to user actions from the UI ([StatisticsFragment]), retrieves the data and updates
  * the UI as required.
  */
-class StatisticsPresenter(tasksRepository: TasksRepository,
-                          statisticsView: StatisticsContract.View) : StatisticsContract.Presenter {
+class StatisticsPresenter(tasksRepository: TasksRepository, statisticsView: StatisticsContract.View) : StatisticsContract.Presenter {
 
     private val mTasksRepository: TasksRepository
-
     private val mStatisticsView: StatisticsContract.View
 
     init {
-        mTasksRepository = checkNotNull<TasksRepository>(tasksRepository, "tasksRepository cannot be null")
-        mStatisticsView = checkNotNull(statisticsView, "StatisticsView cannot be null!")
-
+        mTasksRepository = tasksRepository
+        mStatisticsView = statisticsView
         mStatisticsView.setPresenter(this)
     }
 
@@ -72,7 +68,7 @@ class StatisticsPresenter(tasksRepository: TasksRepository,
                     }
                 }
                 // The view may not be able to handle UI updates anymore
-                if (!mStatisticsView.isActive) {
+                if (!mStatisticsView.isActive()) {
                     return
                 }
                 mStatisticsView.setProgressIndicator(false)
@@ -82,7 +78,7 @@ class StatisticsPresenter(tasksRepository: TasksRepository,
 
             override fun onDataNotAvailable() {
                 // The view may not be able to handle UI updates anymore
-                if (!mStatisticsView.isActive) {
+                if (!mStatisticsView.isActive()) {
                     return
                 }
                 mStatisticsView.showLoadingStatisticsError()

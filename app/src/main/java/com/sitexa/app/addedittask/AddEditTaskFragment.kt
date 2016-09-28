@@ -26,7 +26,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-import com.google.common.base.Preconditions.checkNotNull
 import com.sitexa.app.R
 
 /**
@@ -35,9 +34,7 @@ import com.sitexa.app.R
 class AddEditTaskFragment : Fragment(), AddEditTaskContract.View {
 
     private var mPresenter: AddEditTaskContract.Presenter? = null
-
     private var mTitle: TextView? = null
-
     private var mDescription: TextView? = null
 
     override fun onResume() {
@@ -46,7 +43,7 @@ class AddEditTaskFragment : Fragment(), AddEditTaskContract.View {
     }
 
     override fun setPresenter(presenter: AddEditTaskContract.Presenter) {
-        mPresenter = checkNotNull(presenter)
+        mPresenter = presenter
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -54,7 +51,9 @@ class AddEditTaskFragment : Fragment(), AddEditTaskContract.View {
 
         val fab = activity.findViewById(R.id.fab_edit_task_done) as FloatingActionButton
         fab.setImageResource(R.drawable.ic_done)
-        fab.setOnClickListener { mPresenter!!.saveTask(mTitle!!.text.toString(), mDescription!!.text.toString()) }
+        fab.setOnClickListener {
+            mPresenter!!.saveTask(mTitle!!.text.toString(), mDescription!!.text.toString())
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -85,8 +84,9 @@ class AddEditTaskFragment : Fragment(), AddEditTaskContract.View {
         mDescription!!.text = description
     }
 
-    override val isActive: Boolean
-        get() = isAdded
+    override fun isActive(): Boolean {
+        return isAdded
+    }
 
     companion object {
 

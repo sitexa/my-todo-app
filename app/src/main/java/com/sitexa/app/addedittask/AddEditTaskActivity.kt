@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.support.annotation.VisibleForTesting
 import android.support.test.espresso.IdlingResource
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import com.sitexa.app.Injection
 import com.sitexa.app.R
 import com.sitexa.app.util.ActivityUtils
@@ -74,7 +73,6 @@ class AddEditTaskActivity : AppCompatActivity() {
         get() = EspressoIdlingResource.idlingResource
 
     companion object {
-
         val REQUEST_ADD_TASK = 1
     }
 }

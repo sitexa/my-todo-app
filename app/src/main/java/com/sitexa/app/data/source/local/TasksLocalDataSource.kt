@@ -18,7 +18,6 @@ package com.sitexa.app.data.source.local
 
 import android.content.ContentValues
 import android.content.Context
-import com.google.common.base.Preconditions.checkNotNull
 import com.sitexa.app.data.Task
 import com.sitexa.app.data.source.TasksDataSource
 import com.sitexa.app.data.source.local.TasksPersistenceContract.TaskEntry
@@ -33,7 +32,6 @@ class TasksLocalDataSource private constructor(context: Context) : TasksDataSour
     private val mDbHelper: TasksDbHelper
 
     init {
-        checkNotNull(context)
         mDbHelper = TasksDbHelper(context)
     }
 
@@ -47,8 +45,7 @@ class TasksLocalDataSource private constructor(context: Context) : TasksDataSour
 
         val projection = arrayOf<String>(TaskEntry.COLUMN_NAME_ENTRY_ID, TaskEntry.COLUMN_NAME_TITLE, TaskEntry.COLUMN_NAME_DESCRIPTION, TaskEntry.COLUMN_NAME_COMPLETED)
 
-        val c = db.query(
-                TasksPersistenceContract.TaskEntry.TABLE_NAME, projection, null, null, null, null, null)
+        val c = db.query(TasksPersistenceContract.TaskEntry.TABLE_NAME, projection, null, null, null, null, null)
 
         if (c != null && c.count > 0) {
             while (c.moveToNext()) {
@@ -110,7 +107,6 @@ class TasksLocalDataSource private constructor(context: Context) : TasksDataSour
     }
 
     override fun saveTask(task: Task) {
-        checkNotNull<Task>(task)
         val db = mDbHelper.writableDatabase
 
         val values = ContentValues()

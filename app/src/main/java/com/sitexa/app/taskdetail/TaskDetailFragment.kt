@@ -25,8 +25,6 @@ import android.support.v4.app.Fragment
 import android.view.*
 import android.widget.CheckBox
 import android.widget.TextView
-import com.google.common.base.Preconditions
-import com.google.common.base.Preconditions.checkNotNull
 import com.sitexa.app.R
 import com.sitexa.app.addedittask.AddEditTaskActivity
 import com.sitexa.app.addedittask.AddEditTaskFragment
@@ -37,11 +35,8 @@ import com.sitexa.app.addedittask.AddEditTaskFragment
 class TaskDetailFragment : Fragment(), TaskDetailContract.View {
 
     private var mPresenter: TaskDetailContract.Presenter? = null
-
     private var mDetailTitle: TextView? = null
-
     private var mDetailDescription: TextView? = null
-
     private var mDetailCompleteStatus: CheckBox? = null
 
     override fun onResume() {
@@ -66,7 +61,7 @@ class TaskDetailFragment : Fragment(), TaskDetailContract.View {
     }
 
     override fun setPresenter(presenter: TaskDetailContract.Presenter) {
-        mPresenter = checkNotNull(presenter)
+        mPresenter = presenter
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -104,8 +99,6 @@ class TaskDetailFragment : Fragment(), TaskDetailContract.View {
     }
 
     override fun showCompletionStatus(complete: Boolean) {
-        Preconditions.checkNotNull<CheckBox>(mDetailCompleteStatus)
-
         mDetailCompleteStatus!!.isChecked = complete
         mDetailCompleteStatus!!.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
@@ -153,13 +146,13 @@ class TaskDetailFragment : Fragment(), TaskDetailContract.View {
         mDetailDescription!!.text = getString(R.string.no_data)
     }
 
-    override val isActive: Boolean
-        get() = isAdded
+    override fun isActive(): Boolean {
+        return isAdded
+    }
 
     companion object {
 
         private val ARGUMENT_TASK_ID = "TASK_ID"
-
         private val REQUEST_EDIT_TASK = 1
 
         fun newInstance(taskId: String?): TaskDetailFragment {

@@ -65,7 +65,6 @@ class TaskDetailActivity : AppCompatActivity() {
     }
 
     companion object {
-
         val EXTRA_TASK_ID = "TASK_ID"
     }
 }

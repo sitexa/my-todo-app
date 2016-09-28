@@ -48,7 +48,7 @@ interface TaskDetailContract {
 
         fun showTaskMarkedActive()
 
-        val isActive: Boolean
+        fun isActive(): Boolean
     }
 
     interface Presenter : BasePresenter {

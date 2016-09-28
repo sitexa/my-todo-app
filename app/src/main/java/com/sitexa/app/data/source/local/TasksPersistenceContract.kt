@@ -24,16 +24,14 @@ import android.provider.BaseColumns
 object TasksPersistenceContract {
 
     /* Inner class that defines the table contents */
-    class TaskEntry : BaseColumns {
-        companion object {
-            val _ID = "_id" //added by xnpeng
-            val _COUNT = "_count" //added by xnpeng
-            val TABLE_NAME = "task"
-            val COLUMN_NAME_ENTRY_ID = "entryid"
-            val COLUMN_NAME_TITLE = "title"
-            val COLUMN_NAME_DESCRIPTION = "description"
-            val COLUMN_NAME_COMPLETED = "completed"
-        }
+    object TaskEntry : BaseColumns {
+        val _ID = "_id" //added by xnpeng
+        val _COUNT = "_count" //added by xnpeng
+        val TABLE_NAME = "task"
+        val COLUMN_NAME_ENTRY_ID = "entryid"
+        val COLUMN_NAME_TITLE = "title"
+        val COLUMN_NAME_DESCRIPTION = "description"
+        val COLUMN_NAME_COMPLETED = "completed"
     }
 }// To prevent someone from accidentally instantiating the contract class,
 // give it an empty constructor.

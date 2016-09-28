@@ -32,7 +32,7 @@ interface StatisticsContract {
 
         fun showLoadingStatisticsError()
 
-        val isActive: Boolean
+        fun isActive(): Boolean
     }
 
     interface Presenter : BasePresenter

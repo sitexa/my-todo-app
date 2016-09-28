@@ -16,7 +16,6 @@
 
 package com.sitexa.app.taskdetail
 
-import com.google.common.base.Preconditions.checkNotNull
 import com.google.common.base.Strings
 import com.sitexa.app.data.Task
 import com.sitexa.app.data.source.TasksDataSource
@@ -35,9 +34,8 @@ class TaskDetailPresenter(private val mTaskId: String?,
     private val mTaskDetailView: TaskDetailContract.View
 
     init {
-        mTasksRepository = checkNotNull<TasksRepository>(tasksRepository, "tasksRepository cannot be null!")
-        mTaskDetailView = checkNotNull(taskDetailView, "taskDetailView cannot be null!")
-
+        mTasksRepository = tasksRepository
+        mTaskDetailView = taskDetailView
         mTaskDetailView.setPresenter(this)
     }
 
@@ -55,7 +53,7 @@ class TaskDetailPresenter(private val mTaskId: String?,
         mTasksRepository.getTask(mTaskId!!, object : TasksDataSource.GetTaskCallback {
             override fun onTaskLoaded(task: Task) {
                 // The view may not be able to handle UI updates anymore
-                if (!mTaskDetailView.isActive) {
+                if (!mTaskDetailView.isActive()) {
                     return
                 }
                 mTaskDetailView.setLoadingIndicator(false)
@@ -64,7 +62,7 @@ class TaskDetailPresenter(private val mTaskId: String?,
 
             override fun onDataNotAvailable() {
                 // The view may not be able to handle UI updates anymore
-                if (!mTaskDetailView.isActive) {
+                if (!mTaskDetailView.isActive()) {
                     return
                 }
                 mTaskDetailView.showMissingTask()

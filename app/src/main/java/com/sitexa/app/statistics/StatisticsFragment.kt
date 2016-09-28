@@ -75,11 +75,11 @@ class StatisticsFragment : Fragment(), StatisticsContract.View {
         mStatisticsTV!!.text = resources.getString(R.string.statistics_error)
     }
 
-    override val isActive: Boolean
-        get() = isAdded
+    override fun isActive(): Boolean {
+        return isAdded
+    }
 
     companion object {
-
         fun newInstance(): StatisticsFragment {
             return StatisticsFragment()
         }

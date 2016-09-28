@@ -16,7 +16,7 @@
 
 package com.sitexa.app.addedittask
 
-import com.google.common.base.Preconditions.checkNotNull
+import android.util.Log
 import com.sitexa.app.data.Task
 import com.sitexa.app.data.source.TasksDataSource
 
@@ -24,37 +24,38 @@ import com.sitexa.app.data.source.TasksDataSource
  * Listens to user actions from the UI ([AddEditTaskFragment]), retrieves the data and updates
  * the UI as required.
  */
-class AddEditTaskPresenter
-(private val mTaskId: String?, tasksRepository: TasksDataSource,
- addTaskView: AddEditTaskContract.View) : AddEditTaskContract.Presenter, TasksDataSource.GetTaskCallback {
+class AddEditTaskPresenter(private val mTaskId: String?,
+                           tasksRepository: TasksDataSource,
+                           addTaskView: AddEditTaskContract.View) :
+        AddEditTaskContract.Presenter, TasksDataSource.GetTaskCallback {
 
     private val mTasksRepository: TasksDataSource
-
     private val mAddTaskView: AddEditTaskContract.View
 
     init {
-        mTasksRepository = checkNotNull<TasksDataSource>(tasksRepository)
-        mAddTaskView = checkNotNull(addTaskView)
-
+        mTasksRepository = tasksRepository
+        mAddTaskView = addTaskView
         mAddTaskView.setPresenter(this)
     }
 
     override fun start() {
-        if (!isNewTask) {
+        if (!isNewTask()) {
             populateTask()
         }
     }
 
     override fun saveTask(title: String, description: String) {
-        if (isNewTask) {
+        if (isNewTask()) {
+            Log.d("saveTask:new,", " title:$title ,description:$description")
             createTask(title, description)
         } else {
+            Log.d("saveTask:update,", " title:$title ,description:$description")
             updateTask(title, description)
         }
     }
 
     override fun populateTask() {
-        if (isNewTask) {
+        if (isNewTask()) {
             throw RuntimeException("populateTask() was called but task is new.")
         }
         mTasksRepository.getTask(mTaskId!!, this)
@@ -62,7 +63,7 @@ class AddEditTaskPresenter
 
     override fun onTaskLoaded(task: Task) {
         // The view may not be able to handle UI updates anymore
-        if (mAddTaskView.isActive) {
+        if (mAddTaskView.isActive()) {
             mAddTaskView.setTitle(task.title!!)
             mAddTaskView.setDescription(task.description!!)
         }
@@ -70,13 +71,14 @@ class AddEditTaskPresenter
 
     override fun onDataNotAvailable() {
         // The view may not be able to handle UI updates anymore
-        if (mAddTaskView.isActive) {
+        if (mAddTaskView.isActive()) {
             mAddTaskView.showEmptyTaskError()
         }
     }
 
-    private val isNewTask: Boolean
-        get() = mTaskId == null
+    private fun isNewTask(): Boolean {
+        return mTaskId == null
+    }
 
     private fun createTask(title: String, description: String) {
         val newTask = Task(title, description)
@@ -89,7 +91,7 @@ class AddEditTaskPresenter
     }
 
     private fun updateTask(title: String, description: String) {
-        if (isNewTask) {
+        if (isNewTask()) {
             throw RuntimeException("updateTask() was called but task is new.")
         }
         mTasksRepository.saveTask(Task(title, description, mTaskId))

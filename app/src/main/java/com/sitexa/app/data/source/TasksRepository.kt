@@ -17,7 +17,6 @@
 package com.sitexa.app.data.source
 
 
-import com.google.common.base.Preconditions.checkNotNull
 import com.sitexa.app.data.Task
 import java.util.*
 
@@ -33,7 +32,6 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
                                           tasksLocalDataSource: TasksDataSource) : TasksDataSource {
 
     private val mTasksRemoteDataSource: TasksDataSource
-
     private val mTasksLocalDataSource: TasksDataSource
 
     /**
@@ -48,8 +46,8 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
     internal var mCacheIsDirty = false
 
     init {
-        mTasksRemoteDataSource = checkNotNull(tasksRemoteDataSource)
-        mTasksLocalDataSource = checkNotNull(tasksLocalDataSource)
+        mTasksRemoteDataSource = tasksRemoteDataSource
+        mTasksLocalDataSource = tasksLocalDataSource
     }
 
     /**
@@ -61,7 +59,6 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
      * get the data.
      */
     override fun getTasks(callback: TasksDataSource.LoadTasksCallback) {
-        checkNotNull(callback)
 
         // Respond immediately with cache if available and not dirty
         if (mCachedTasks != null && !mCacheIsDirty) {
@@ -88,7 +85,6 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
     }
 
     override fun saveTask(task: Task) {
-        checkNotNull<Task>(task)
         mTasksRemoteDataSource.saveTask(task)
         mTasksLocalDataSource.saveTask(task)
 
@@ -100,7 +96,6 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
     }
 
     override fun completeTask(task: Task) {
-        checkNotNull<Task>(task)
         mTasksRemoteDataSource.completeTask(task)
         mTasksLocalDataSource.completeTask(task)
 
@@ -114,12 +109,10 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
     }
 
     override fun completeTask(taskId: String) {
-        checkNotNull(taskId)
         completeTask(getTaskWithId(taskId)!!)
     }
 
     override fun activateTask(task: Task) {
-        checkNotNull<Task>(task)
         mTasksRemoteDataSource.activateTask(task)
         mTasksLocalDataSource.activateTask(task)
 
@@ -133,7 +126,6 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
     }
 
     override fun activateTask(taskId: String) {
-        checkNotNull(taskId)
         activateTask(getTaskWithId(taskId)!!)
     }
 
@@ -163,9 +155,6 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
      * get the data.
      */
     override fun getTask(taskId: String, callback: TasksDataSource.GetTaskCallback) {
-        checkNotNull(taskId)
-        checkNotNull(callback)
-
         val cachedTask = getTaskWithId(taskId)
 
         // Respond immediately with cache if available
@@ -211,8 +200,8 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
     }
 
     override fun deleteTask(taskId: String) {
-        mTasksRemoteDataSource.deleteTask(checkNotNull(taskId))
-        mTasksLocalDataSource.deleteTask(checkNotNull(taskId))
+        mTasksRemoteDataSource.deleteTask(taskId)
+        mTasksLocalDataSource.deleteTask(taskId)
 
         mCachedTasks!!.remove(taskId)
     }
@@ -250,7 +239,6 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
     }
 
     private fun getTaskWithId(id: String): Task? {
-        checkNotNull(id)
         if (mCachedTasks == null || mCachedTasks!!.isEmpty()) {
             return null
         } else {
@@ -263,14 +251,6 @@ class TasksRepository private constructor(tasksRemoteDataSource: TasksDataSource
         fun getInstance(tasksRemoteDataSource: TasksDataSource,
                         tasksLocalDataSource: TasksDataSource): TasksRepository {
             return TasksRepository(tasksRemoteDataSource, tasksLocalDataSource)
-        }
-
-        /**
-         * Used to force [.getInstance] to create a new instance
-         * next time it's called.
-         */
-        fun destroyInstance() {
-            //INSTANCE = null
         }
     }
 }

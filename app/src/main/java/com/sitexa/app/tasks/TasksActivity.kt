@@ -34,7 +34,6 @@ import com.sitexa.app.util.EspressoIdlingResource
 class TasksActivity : AppCompatActivity() {
 
     private var mDrawerLayout: DrawerLayout? = null
-
     private var mTasksPresenter: TasksPresenter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

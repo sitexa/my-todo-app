@@ -22,7 +22,6 @@ import com.sitexa.app.data.FakeTasksRemoteDataSource
 import com.sitexa.app.data.source.TasksRepository
 import com.sitexa.app.data.source.local.TasksLocalDataSource
 
-import com.google.common.base.Preconditions.checkNotNull
 
 /**
  * Enables injection of mock implementations for
@@ -32,7 +31,6 @@ import com.google.common.base.Preconditions.checkNotNull
 object Injection {
 
     fun provideTasksRepository(context: Context): TasksRepository {
-        checkNotNull(context)
         return TasksRepository.getInstance(FakeTasksRemoteDataSource.getInstance(),
                 TasksLocalDataSource.getInstance(context))
     }

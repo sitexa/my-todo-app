@@ -17,6 +17,7 @@
 package com.sitexa.app.data
 
 import android.support.annotation.VisibleForTesting
+import android.util.Log
 import com.google.common.collect.Lists
 import com.sitexa.app.data.source.TasksDataSource
 import java.util.*
@@ -24,19 +25,21 @@ import java.util.*
 /**
  * Implementation of a remote data source with static access to the data for easy testing.
  */
-class FakeTasksRemoteDataSource// Prevent direct instantiation.
-private constructor() : TasksDataSource {
+class FakeTasksRemoteDataSource private constructor() : TasksDataSource {
 
     override fun getTasks(callback: TasksDataSource.LoadTasksCallback) {
+        Log.d("fake getTasks", "tasks:" + TASKS_SERVICE_DATA.values)
         callback.onTasksLoaded(Lists.newArrayList(TASKS_SERVICE_DATA.values))
     }
 
     override fun getTask(taskId: String, callback: TasksDataSource.GetTaskCallback) {
         val task = TASKS_SERVICE_DATA[taskId]
+        Log.d("fake getTask", "task:" + task!!.title)
         callback.onTaskLoaded(task!!)
     }
 
     override fun saveTask(task: Task) {
+        Log.d("Fake saveTask", "task:" + task.id)
         TASKS_SERVICE_DATA.put(task.id, task)
     }
 
@@ -88,7 +91,8 @@ private constructor() : TasksDataSource {
         }
     }
 
-    companion object factory {
+
+    companion object factory{
 
         private val TASKS_SERVICE_DATA = LinkedHashMap<String, Task>()
 

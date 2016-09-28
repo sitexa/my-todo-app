@@ -22,7 +22,6 @@ import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.sitexa.app.Injection
 import com.sitexa.app.R
@@ -58,12 +57,10 @@ class StatisticsActivity : AppCompatActivity() {
         var statisticsFragment: StatisticsFragment? = supportFragmentManager.findFragmentById(R.id.contentFrame) as StatisticsFragment?
         if (statisticsFragment == null) {
             statisticsFragment = StatisticsFragment.newInstance()
-            ActivityUtils.addFragmentToActivity(supportFragmentManager,
-                    statisticsFragment, R.id.contentFrame)
+            ActivityUtils.addFragmentToActivity(supportFragmentManager, statisticsFragment, R.id.contentFrame)
         }
 
-        StatisticsPresenter(
-                Injection.provideTasksRepository(applicationContext), statisticsFragment)
+        StatisticsPresenter(Injection.provideTasksRepository(applicationContext), statisticsFragment)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
